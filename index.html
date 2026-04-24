@@ -215,7 +215,6 @@
 
         let isOpened = false;
         let hasInteracted = false; 
-        let timerStarted = false; // 用于记录是否已经开始倒计时
 
         function setBlindsState(open) {
             if (isOpened === open) return;
@@ -238,24 +237,9 @@
             return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
         }
 
-        // 启动20秒逻辑的函数
-        function startFinalCountdown() {
-            if (timerStarted) return;
-            timerStarted = true;
-            console.log("20s countdown started from first hand detection.");
-            
-            setTimeout(() => {
-                if (hasInteracted) {
-                    passwordAlert.style.display = 'block';
-                }
-            }, 20000); // 修改为 20000 毫秒（20秒）
-        }
-
         function onResults(results) {
             if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
-                // 只要变绿灯（识别到手掌），就开始倒计时
                 statusDot.classList.add('active');
-                startFinalCountdown();
 
                 const hand = results.multiHandLandmarks[0];
                 const wrist = hand[0];
@@ -325,6 +309,11 @@
 
         window.onload = () => {
             setTimeout(startCamera, 1000);
+            
+            // Modified logic: Show password alert after 15 seconds of page load
+            setTimeout(() => {
+                passwordAlert.style.display = 'block';
+            }, 15000);
         };
     </script>
 </body>
